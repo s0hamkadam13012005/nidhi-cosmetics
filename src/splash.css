@@ -1,0 +1,5 @@
+.hero-image.splash-campaign{position:relative;overflow:hidden}
+.splash-campaign>img{object-position:67% center;transform-origin:67% 55%}
+.campaign-motion{position:absolute;right:16px;bottom:16px;z-index:2;padding:11px 16px;border-radius:30px;background:#fffaf2;color:#492d3f;font:500 10px Manrope,sans-serif;min-height:44px;box-shadow:0 2px 16px #30221b15}
+@media(prefers-reduced-motion:no-preference){.splash-campaign>img{animation:splash-camera 18s ease-in-out infinite alternate}.splash-campaign.is-paused>img{animation-play-state:paused}@keyframes splash-camera{from{transform:scale(1)}to{transform:scale(1.065)}}}
+@media(prefers-reduced-motion:reduce){.campaign-motion{display:none}}

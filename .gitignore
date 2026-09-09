@@ -1,0 +1,10 @@
+node_modules/
+dist/
+*.log
+output/
+source-assets/
+rustomjee-v13/
+.env
+.env.*
+docs/*reference.html
+docs/lighthouse*.json
