@@ -1,29 +1,32 @@
 # Nidhi Cosmetics
 
-Premium React + Vite catalogue for EYLIN Botanical, EYLIN Spa and hospitality enquiries.
+React + Vite catalogue with 126 product listings across 10 categories, including 14 EYLIN bath-and-body collections.
 
 ## Run
 
 ```sh
-npm install
+npm ci
 npm run dev
 ```
 
-## Production
+## Verify and build
 
 ```sh
+node scripts/test-catalogue.mjs
 npm run build
 npm run preview
 ```
 
-Build output is in `dist/`. The live nidhicosmetic.com website has not been modified.
+The GitHub Pages workflow publishes `main`. The original nidhicosmetic.com website is unchanged.
 
-## Features
+## Catalogue
 
-- Responsive layouts, self-hosted fonts, light/dark theme and reduced-motion support
-- Product filters, search and multi-image detail galleries
+- Search, category and collection filters, alphabetical sorting and progressive product loading
+- 258 selected product photographs with responsive WebP sizes and detail galleries
 - Persistent sample shortlist with quantities
-- Validated enquiry form that prepares an email or downloads a text enquiry; no fake submission
-- Original photographs, corrected image masters and optimized website assets
+- Enquiry form that prepares an email or downloads a text enquiry
+- Responsive layouts, self-hosted fonts, light/dark theme and reduced-motion support
 
-See docs/DESIGN.md for source details, image treatment and deployment considerations. Image-generation prompts are retained in output/imagegen/prompts.json.
+Product data is in `src/data/products.json`; the source-photo mapping is in `docs/product-catalogue.csv`. Names and categories were reconciled against the supplied September 2026 product archive. Alternate compositions are grouped in galleries. Sizes are included where legible; availability, kit contents and pricing are confirmed on enquiry.
+
+To regenerate assets, extract the supplied archive locally to `source-assets/full-catalogue/website folder`, then run `node scripts/catalogue-inventory.mjs` and `node scripts/import-catalogue.mjs`. The original archive and inspection output are excluded from Git.

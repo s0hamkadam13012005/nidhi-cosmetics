@@ -1,0 +1,24 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import {filterProducts,matchesSearch} from '../src/catalogue.mjs';
+const products=JSON.parse(await fs.readFile('src/data/products.json','utf8'));
+const categories=JSON.parse(await fs.readFile('src/data/categories.json','utf8'));
+assert.equal(new Set(products.map(p=>p.id)).size,products.length,'Product IDs must be unique');
+assert.equal(products.filter(p=>p.category==='Gift Sets').length,14,'All fourteen bath collections need kits');
+for(const category of categories)assert(products.some(p=>p.category===category),'Empty category '+category);
+for(const product of products){assert(product.name&&product.collection&&product.description);assert(categories.includes(product.category));assert.equal(product.image,product.gallery[0]);for(const image of product.gallery)for(const suffix of ['','-480','-800'])await fs.access(`public/images/${image}${suffix}.webp`);}
+assert.equal(filterProducts(products,{category:'Dispensers'}).length,4);
+assert.equal(filterProducts(products,{category:'Handwash'}).length,5);
+assert.equal(filterProducts(products,{category:'Air Fresheners'}).length,6);
+assert.equal(filterProducts(products,{collection:'EYLIN Moringa'}).length,7);
+assert.equal(filterProducts(products,{category:'Hair Care',collection:'EYLIN Moringa'}).length,2);
+assert.equal(filterProducts(products,{category:'Soaps',collection:'EYLIN Moringa'}).length,1);
+assert.equal(filterProducts(products,{query:'moringa conditioner'}).length,1);
+assert.equal(filterProducts(products,{query:'neem aloe shampoo'}).length,1);
+assert.equal(filterProducts(products,{query:'  ZIVARA   AIR  '}).length,6);
+assert.equal(filterProducts(products,{query:'no-such-product'}).length,0);
+assert.equal(filterProducts(products,{category:'Dispensers',collection:'EYLIN Moringa'}).length,0);
+const az=filterProducts(products,{sort:'az'});assert(az.every((p,i)=>!i||az[i-1].name.localeCompare(p.name)<=0));
+assert(matchesSearch(products.find(p=>p.id==='botanical-soap'),'fuji green tea soap'));
+assert(products.some(p=>p.id==='botanical-set')&&products.some(p=>p.id==='spa-essentials'));
+console.log(`Catalogue verified: ${products.length} products, ${categories.length} categories, 14 guest amenity collections. All responsive gallery assets exist; search, sorting and combined filters pass.`);
