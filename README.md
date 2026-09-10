@@ -30,3 +30,7 @@ The GitHub Pages workflow publishes `main`. The original nidhicosmetic.com websi
 Product data is in `src/data/products.json`; the source-photo mapping is in `docs/product-catalogue.csv`. Names and categories were reconciled against the supplied September 2026 product archive. Alternate compositions are grouped in galleries. Sizes are included where legible; availability, kit contents and pricing are confirmed on enquiry.
 
 To regenerate assets, extract the supplied archive locally to `source-assets/full-catalogue/website folder`, then run `node scripts/catalogue-inventory.mjs` and `node scripts/import-catalogue.mjs`. The original archive and inspection output are excluded from Git.
+
+## Search and opening experience
+
+The build produces 138 static pages, including all product and category pages, with metadata, canonical URLs, structured data and a sitemap. See docs/SEO.md for Search Console and final-domain setup. The homepage has a brief, skippable brand reveal with reduced-motion support.
