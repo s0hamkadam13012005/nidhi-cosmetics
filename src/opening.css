@@ -1,11 +1,11 @@
-.brand-opening{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;overflow:hidden;background:#fcfbfc;animation:opening-away .7s cubic-bezier(.76,0,.24,1) 1.25s both;pointer-events:none}
-.opening-mark{display:flex;flex-direction:column;align-items:center;gap:28px;animation:opening-mark .8s cubic-bezier(.23,1,.32,1) both;z-index:1}
-.opening-mark img{width:clamp(206px,24vw,310px);height:auto;object-fit:contain}
-.opening-mark span{font:10px Poppins,sans-serif;letter-spacing:.28em;color:#70465f;animation:opening-caption .65s ease-out .25s both}
-.opening-ripple{position:absolute;width:min(65vw,650px);aspect-ratio:1;border:1px solid #bd8fa84d;border-radius:50%;box-shadow:0 0 0 35px #bd8fa80a,0 0 0 75px #bd8fa807;animation:opening-ripple 1.8s cubic-bezier(.23,1,.32,1) both}
+.brand-opening{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;overflow:hidden;pointer-events:none}
+.opening-curtain{position:absolute;top:0;bottom:0;width:50.1%;background:#fcfbfc;animation:curtain-open 1s cubic-bezier(.76,0,.24,1) 1.25s both}
+.curtain-left{left:0;--exit:-101%}.curtain-right{right:0;--exit:101%}
+.opening-mark{display:flex;flex-direction:column;align-items:center;gap:28px;z-index:1;animation:logo-arrive .8s cubic-bezier(.22,1,.36,1) both,logo-depart .65s cubic-bezier(.4,0,.2,1) 1.3s forwards}
+.opening-mark img{width:clamp(220px,25vw,330px);height:auto;object-fit:contain}
+.opening-mark span{font:10px Poppins,sans-serif;letter-spacing:.25em;color:#70465f;animation:logo-arrive .65s ease-out .25s backwards}
 .brand-opening button{position:absolute;right:28px;bottom:24px;min-height:44px;color:#70465f;font:11px Poppins,sans-serif;pointer-events:auto}
-@keyframes opening-mark{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}
-@keyframes opening-caption{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-@keyframes opening-ripple{from{opacity:0;transform:scale(.55)}35%{opacity:1}to{opacity:0;transform:scale(1.65)}}
-@keyframes opening-away{from{transform:translateY(0)}to{transform:translateY(-101%)}}
+@keyframes curtain-open{from{transform:translateX(0)}to{transform:translateX(var(--exit))}}
+@keyframes logo-arrive{from{opacity:0;transform:translateY(14px) scale(.92);filter:blur(5px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes logo-depart{to{opacity:0;transform:translateY(-22px) scale(1.08)}}
 @media(prefers-reduced-motion:reduce){.brand-opening{display:none}}
