@@ -1,12 +1,15 @@
 .hero-image.splash-campaign{position:relative;overflow:hidden;isolation:isolate}
-.splash-campaign>img{object-position:67% center;transform-origin:67% 65%}
-/* One brief camera move and surface reflection, then a still product image. */
+.splash-campaign>img,.water-reflection{transform-origin:67% 65%}
+.splash-campaign>img{object-position:67% center}
+.water-reflection{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
 @media(prefers-reduced-motion:no-preference){
- .splash-campaign>img{animation:splash-camera-reveal 3.2s cubic-bezier(.22,1,.36,1) 1.2s backwards}
- .splash-campaign::before{content:"";position:absolute;inset:-30%;z-index:1;pointer-events:none;background:linear-gradient(110deg,transparent 39%,rgb(255 255 240 / .05) 44%,rgb(255 255 240 / .16) 49%,rgb(255 255 240 / .05) 54%,transparent 60%);opacity:0;animation:splash-light-sweep 2.6s cubic-bezier(.25,.1,.25,1) 1.65s both}
- .splash-campaign::after{content:"";position:absolute;left:67%;top:85%;width:32%;aspect-ratio:1;border-radius:50%;border:1px solid rgb(255 255 240 / .5);box-shadow:0 0 0 10px rgb(255 255 255 / .03),0 0 0 22px rgb(255 255 255 / .1);z-index:1;pointer-events:none;opacity:0;animation:splash-surface-ripple 2.3s cubic-bezier(.16,1,.3,1) 1.65s both}
+ .splash-campaign>img,.water-reflection{animation:product-camera 4.6s cubic-bezier(.22,1,.36,1) both}
+ .splash-campaign::before{content:"";position:absolute;inset:-30%;z-index:2;pointer-events:none;background:linear-gradient(110deg,transparent 40%,rgb(255 255 240 / .22) 49%,transparent 57%);animation:product-light 3s cubic-bezier(.25,.1,.25,1) 1.35s both}
+ .hero-copy h1{animation:campaign-title .95s cubic-bezier(.22,1,.36,1) 1.45s backwards}
+ .hero-copy>p:not(.eyebrow),.hero-copy>.button{animation:campaign-copy .85s cubic-bezier(.22,1,.36,1) 1.7s backwards}
 }
-@keyframes splash-camera-reveal{from{transform:scale(1.095) translate3d(-.6%,.4%,0)}to{transform:scale(1) translate3d(0,0,0)}}
-@keyframes splash-light-sweep{0%{opacity:0;transform:translate3d(-45%,0,0)}25%{opacity:1}75%{opacity:.65}100%{opacity:0;transform:translate3d(45%,0,0)}}
-@keyframes splash-surface-ripple{0%{opacity:0;transform:translate(-50%,-50%) scale(.2,.07)}18%{opacity:.38}100%{opacity:0;transform:translate(-50%,-50%) scale(1.65,.29)}}
-@media(prefers-reduced-motion:reduce){.splash-campaign>img{animation:none;transform:none}.splash-campaign::before,.splash-campaign::after{display:none}}
+@keyframes product-camera{0%{transform:scale(1.14) translate3d(-1.1%,1%,0)}35%{transform:scale(1.065) translate3d(-.4%,.3%,0)}100%{transform:none}}
+@keyframes product-light{0%{opacity:0;transform:translateX(-45%)}30%{opacity:1}100%{opacity:0;transform:translateX(45%)}}
+@keyframes campaign-title{from{opacity:0;transform:translateY(24px);clip-path:inset(0 0 100% 0)}to{opacity:1;transform:none;clip-path:inset(0)}}
+@keyframes campaign-copy{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.water-reflection{display:none}.splash-campaign::before{display:none}.splash-campaign>img,.hero-copy h1,.hero-copy>p,.hero-copy>.button{animation:none;transform:none}}
