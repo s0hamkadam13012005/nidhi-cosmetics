@@ -1,5 +1,12 @@
-.hero-image.splash-campaign{position:relative;overflow:hidden}
-.splash-campaign>img{object-position:67% center;transform-origin:67% 55%}
-.campaign-motion{position:absolute;right:16px;bottom:16px;z-index:2;padding:11px 16px;border-radius:30px;background:#fffaf2;color:#492d3f;font:500 10px Manrope,sans-serif;min-height:44px;box-shadow:0 2px 16px #30221b15}
-@media(prefers-reduced-motion:no-preference){.splash-campaign>img{animation:splash-camera 18s ease-in-out infinite alternate}.splash-campaign.is-paused>img{animation-play-state:paused}@keyframes splash-camera{from{transform:scale(1)}to{transform:scale(1.065)}}}
-@media(prefers-reduced-motion:reduce){.campaign-motion{display:none}}
+.hero-image.splash-campaign{position:relative;overflow:hidden;isolation:isolate}
+.splash-campaign>img{object-position:67% center;transform-origin:67% 65%}
+/* One brief camera move and surface reflection, then a still product image. */
+@media(prefers-reduced-motion:no-preference){
+ .splash-campaign>img{animation:splash-camera-reveal 2.8s cubic-bezier(.22,1,.36,1) 1.25s backwards}
+ .splash-campaign::before{content:"";position:absolute;inset:-30%;z-index:1;pointer-events:none;background:linear-gradient(110deg,transparent 39%,rgb(255 255 240 / .05) 44%,rgb(255 255 240 / .22) 49%,rgb(255 255 240 / .05) 54%,transparent 60%);opacity:0;animation:splash-light-sweep 2.3s cubic-bezier(.25,.1,.25,1) 1.5s both}
+ .splash-campaign::after{content:"";position:absolute;left:67%;top:85%;width:37%;aspect-ratio:1;border-radius:50%;border:1px solid rgb(255 255 240 / .5);box-shadow:0 0 0 10px rgb(255 255 255 / .03),0 0 0 22px rgb(255 255 255 / .1);z-index:1;pointer-events:none;opacity:0;animation:splash-surface-ripple 2.3s cubic-bezier(.16,1,.3,1) 1.65s both}
+}
+@keyframes splash-camera-reveal{from{transform:scale(1.085) translate3d(-.8%,.6%,0)}to{transform:scale(1) translate3d(0,0,0)}}
+@keyframes splash-light-sweep{0%{opacity:0;transform:translate3d(-45%,0,0)}25%{opacity:1}75%{opacity:.65}100%{opacity:0;transform:translate3d(45%,0,0)}}
+@keyframes splash-surface-ripple{0%{opacity:0;transform:translate(-50%,-50%) scale(.2,.07)}18%{opacity:.55}100%{opacity:0;transform:translate(-50%,-50%) scale(1.8,.38)}}
+@media(prefers-reduced-motion:reduce){.splash-campaign>img{animation:none;transform:none}.splash-campaign::before,.splash-campaign::after{display:none}}
