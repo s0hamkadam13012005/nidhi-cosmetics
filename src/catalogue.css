@@ -18,3 +18,4 @@
 .catalogue-status button:hover{text-decoration:underline}
 @media(max-width:900px){.catalogue-controls{grid-template-columns:1fr 1fr;gap:14px 26px}.catalogue-controls input,.catalogue-controls select{font-size:14px}}
 @media(max-width:480px){.catalogue-controls{gap:12px 18px;margin-top:26px;padding-top:18px}.catalogue-controls input,.catalogue-controls select{font-size:16px}.catalogue-controls label{font-size:10px}.catalogue-search{grid-column:1/-1}.catalogue-controls label:last-child{grid-column:1/-1;flex-direction:row;align-items:center;justify-content:space-between;border-top:1px solid var(--border);padding-top:6px}.catalogue-controls label:last-child select{width:auto;max-width:70%}.catalogue-status{font-size:10px}}
+@media(max-width:767px){.store-nav a[href*="/categories/"],.store-nav a[href*="/catalogue/"]{display:inline-block}}

@@ -3,7 +3,7 @@ import './opening.css';
 export default function Opening({onComplete}){
  const [visible,setVisible]=useState(false);
  useEffect(()=>{
-  if(new URLSearchParams(location.search).has('product')||matchMedia('(prefers-reduced-motion: reduce)').matches){onComplete(true);return}
+  if((new URLSearchParams(location.search).has('product')||new URLSearchParams(location.search).has('q'))||matchMedia('(prefers-reduced-motion: reduce)').matches){onComplete(true);return}
   setVisible(true);const finish=()=>{setVisible(false);onComplete(true)};
   const timer=setTimeout(finish,2400);const key=e=>{if(e.key==='Escape'||e.key==='Tab')finish()};window.addEventListener('keydown',key);
   return()=>{clearTimeout(timer);window.removeEventListener('keydown',key)};

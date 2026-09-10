@@ -1,8 +1,15 @@
-export const normalizeSearch=value=>String(value).toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
-export function matchesSearch(product,query){const haystack=normalizeSearch([product.name,product.line,product.category,product.collection,product.detail].join(' '));return normalizeSearch(query).split(' ').every(word=>haystack.includes(word));}
+export const categorySlug=value=>value.toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]+/g,'-');
+export const normalizeSearch=value=>String(value??'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/([0-9])([a-z])/g,'$1 $2').replace(/[^a-z0-9]+/g,' ').trim();
+const aliases={aloevera:'aloe',milk:'lotion',shampoos:'shampoo',soaps:'soap',lotions:'lotion',moisturizer:'lotion',moisturiser:'lotion',moisturizing:'lotion',moisturising:'lotion',conditioners:'conditioner',slippers:'slipper',dispensers:'dispenser',amenities:'amenity',kits:'kit',sets:'kit',set:'kit',jasmine:'jasmin',aloe:'aloe',litre:'l',litres:'l',liter:'l',liters:'l',grams:'g',gram:'g',millilitres:'ml',milliliters:'ml',fresheners:'freshener',botanical:'fuji',botanicals:'fuji',fuji:'fuji'};
+const stop=new Set(['a','an','the','and','for','with','of','in','please','show','me','find','products','product']);
+function words(value){return normalizeSearch(value).replace(/\bhand wash\b/g,'handwash').replace(/\bbody wash\b/g,'shower gel').replace(/\bbodywash\b/g,'shower gel').replace(/\bshowergel\b/g,'shower gel').replace(/\bairfreshener\b/g,'air freshener').replace(/\baloe vera\b/g,'aloe').split(/\s+/).filter(w=>w&&!stop.has(w)).map(w=>aliases[w]||w)}
+function distance(a,b){if(Math.abs(a.length-b.length)>1)return 2;const rows=Array.from({length:a.length+1},()=>Array(b.length+1).fill(0));for(let i=0;i<=a.length;i++)rows[i][0]=i;for(let j=0;j<=b.length;j++)rows[0][j]=j;for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++){rows[i][j]=Math.min(rows[i-1][j]+1,rows[i][j-1]+1,rows[i-1][j-1]+(a[i-1]===b[j-1]?0:1));if(i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1])rows[i][j]=Math.min(rows[i][j],rows[i-2][j-2]+1)}return rows[a.length][b.length]}
+const cache=new WeakMap();
+function index(product){if(cache.has(product))return cache.get(product);const primary=words(product.name);const all=[...new Set([...primary,...words([product.line,product.category,product.collection,product.detail,'Nidhi Cosmetics hotel hospitality'].join(' '))])];const item={primary,all};cache.set(product,item);return item}
+export function searchScore(product,query){const terms=words(query).slice(0,12);if(!terms.length)return 1;const {primary,all}=index(product);let score=0;for(const word of terms){if(all.includes(word)){score+=primary.includes(word)?30:15;continue}if(word.length>=2&&all.some(t=>t.startsWith(word))){score+=10;continue}if(word.length>=4&&!/\d/.test(word)&&all.some(t=>t.length>=4&&distance(word,t)===1)){score+=3;continue}return 0}if(normalizeSearch(product.name).includes(normalizeSearch(query)))score+=40;return score}
+export const matchesSearch=(product,query)=>searchScore(product,query)>0;
 export function filterProducts(products,{category='All products',collection='All collections',query='',sort='featured'}={}){
- const result=products.filter(p=>(category==='All products'||p.category===category)&&(collection==='All collections'||p.collection===collection)&&matchesSearch(p,query));
- if(sort==='az')result.sort((a,b)=>a.name.localeCompare(b.name));
- if(sort==='za')result.sort((a,b)=>b.name.localeCompare(a.name));
- return result;
+ const matches=products.filter(p=>(category==='All products'||p.category===category)&&(collection==='All collections'||p.collection===collection)).map(p=>({p,score:searchScore(p,query)})).filter(x=>x.score>0);
+ if(sort==='az')matches.sort((a,b)=>a.p.name.localeCompare(b.p.name));else if(sort==='za')matches.sort((a,b)=>b.p.name.localeCompare(a.p.name));else if(normalizeSearch(query))matches.sort((a,b)=>b.score-a.score);
+ return matches.map(x=>x.p);
 }

@@ -22,3 +22,18 @@ const az=filterProducts(products,{sort:'az'});assert(az.every((p,i)=>!i||az[i-1]
 assert(matchesSearch(products.find(p=>p.id==='botanical-soap'),'fuji green tea soap'));
 assert(products.some(p=>p.id==='botanical-set')&&products.some(p=>p.id==='spa-essentials'));
 console.log(`Catalogue verified: ${products.length} products, ${categories.length} categories, 14 guest amenity collections. All responsive gallery assets exist; search, sorting and combined filters pass.`);
+const searchIds=q=>filterProducts(products,{query:q}).map(p=>p.id);
+assert.deepEqual(searchIds('hand wash'),searchIds('handwash'));
+assert.deepEqual(searchIds('body wash'),searchIds('shower gel'));
+assert.deepEqual(searchIds('soaps'),searchIds('soap'));
+assert(searchIds('shamp') .length>=14);
+assert.equal(searchIds('moringa condtioner')[0],'eylin-moringa-hair-conditioner');
+assert.equal(searchIds('neem aloevera shampoo').length,1);
+assert(searchIds('jasmine').includes('spa-essentials'));
+assert(searchIds('botanical soap').includes('botanical-soap'));
+assert(searchIds('hand wash 5 litre').length===5);
+assert.equal(searchIds('shampoo rose')[0],'eylin-bulgarian-rose-shampoo');
+assert.equal(searchIds('soap laptop').length,0);
+assert.equal(searchIds('soap 999 g').length,0);
+assert(searchIds('soap').every(id=>products.find(p=>p.id===id).category==='Soaps'));
+console.log('Search checks passed: spelling, prefixes, synonyms, plurals, multiword queries and irrelevant-result exclusion.');
